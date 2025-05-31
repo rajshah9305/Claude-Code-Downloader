@@ -1,0 +1,11 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Validate HTML
+      run: |
+        # Add HTML validation or other checks
+        echo "HTML validation would go here"
