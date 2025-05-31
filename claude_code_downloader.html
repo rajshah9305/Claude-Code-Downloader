@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Downloader</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .script-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .code-block {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #4ecdc4;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .step:last-child {
+            border-bottom: none;
+        }
+        .step-number {
+            background: #4ecdc4;
+            color: #1a1a1a;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        .warning {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Claude Code Downloader</h1>
+        
+        <div class="instructions">
+            <h2>📋 How to Use This Script</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Open Claude Web App:</strong> Go to claude.ai in your browser
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Navigate to Your Conversation:</strong> Open the chat with the code you want to download
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Open Browser Console:</strong>
+                <ul>
+                    <li><strong>Chrome/Edge:</strong> Press F12 or Ctrl+Shift+I (Cmd+Option+I on Mac)</li>
+                    <li><strong>Firefox:</strong> Press F12 or Ctrl+Shift+K (Cmd+Option+K on Mac)</li>
+                    <li><strong>Safari:</strong> Enable Developer menu first, then Cmd+Option+I</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Paste the Script:</strong> Copy the script below and paste it into the Console tab
+            </div>
+            
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Press Enter:</strong> Execute the script and wait for downloads to start
+            </div>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This script only works on the Claude web interface (claude.ai). Make sure you're on the conversation page with the code you want to download.
+        </div>
+
+        <div class="script-section">
+            <h2>💻 Copy This Script</h2>
+            <button class="btn" onclick="copyScript()">📋 Copy Script to Clipboard</button>
+            
+            <div class="code-block" id="mainScript">
+(function() {
+    console.log('🚀 Starting Claude Code Downloader...');
+    
+    let downloadCount = 0;
+    const downloadedFiles = new Set();
+    
+    function getFileExtension(language) {
+        const extensions = {
+            'javascript': 'js',
+            'python': 'py',
+            'html': 'html',
+            'css': 'css',
+            'java': 'java',
+            'cpp': 'cpp',
+            'c': 'c',
+            'php': 'php',
+            'ruby': 'rb',
+            'go': 'go',
+            'rust': 'rs',
+            'typescript': 'ts',
+            'jsx': 'jsx',
+            'tsx': 'tsx',
+            'sql': 'sql',
+            'json': 'json',
+            'xml': 'xml',
+            'yaml': 'yml',
+            'markdown': 'md',
+            'bash': 'sh',
+            'shell': 'sh',
+            'powershell': 'ps1',
+            'r': 'r',
+            'matlab': 'm',
+            'swift': 'swift',
+            'kotlin': 'kt',
+            'scala': 'scala',
+            'dart': 'dart'
+        };
+        return extensions[language?.toLowerCase()] || 'txt';
+    }
+    
+    function sanitizeFilename(filename) {
+        return filename.replace(/[^a-z0-9.-]/gi, '_').replace(/_+/g, '_');
+    }
+    
+    function downloadFile(content, filename) {
+        if (downloadedFiles.has(filename)) {
+            const timestamp = new Date().getTime();
+            filename = filename.replace(/(\.[^.]+)$/, `_${timestamp}$1`);
+        }
+        downloadedFiles.add(filename);
+        
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        downloadCount++;
+        console.log(`✅ Downloaded: ${filename}`);
+    }
+    
+    function extractCodeBlocks() {
+        const codeBlocks = document.querySelectorAll('pre code, pre[class*="language-"], code[class*="language-"]');
+        console.log(`Found ${codeBlocks.length} code blocks`);
+        
+        codeBlocks.forEach((block, index) => {
+            const content = block.textContent || block.innerText;
+            if (content.trim().length < 10) return; // Skip very short snippets
+            
+            // Try to detect language from class names
+            let language = 'txt';
+            const classNames = (block.className || block.parentElement?.className || '').toLowerCase();
+            
+            // Common patterns for language detection
+            const langPatterns = [
+                /language-(\w+)/,
+                /lang-(\w+)/,
+                /highlight-(\w+)/,
+                /(\w+)-code/
+            ];
+            
+            for (const pattern of langPatterns) {
+                const match = classNames.match(pattern);
+                if (match) {
+                    language = match[1];
+                    break;
+                }
+            }
+            
+            // Try to detect language from content
+            if (language === 'txt') {
+                const firstLine = content.split('\n')[0].toLowerCase();
+                if (firstLine.includes('def ') || firstLine.includes('import ') || content.includes('print(')) {
+                    language = 'python';
+                } else if (firstLine.includes('function') || content.includes('console.log') || content.includes('const ') || content.includes('let ')) {
+                    language = 'javascript';
+                } else if (content.includes('<!DOCTYPE') || content.includes('<html')) {
+                    language = 'html';
+                } else if (content.includes('SELECT') || content.includes('INSERT') || content.includes('CREATE TABLE')) {
+                    language = 'sql';
+                } else if (firstLine.includes('#include') || content.includes('int main(')) {
+                    language = 'cpp';
+                }
+            }
+            
+            const extension = getFileExtension(language);
+            const filename = sanitizeFilename(`claude_code_${index + 1}.${extension}`);
+            downloadFile(content, filename);
+        });
+    }
+    
+    function extractArtifacts() {
+        // Look for artifacts in the Claude interface
+        const artifacts = document.querySelectorAll('[data-testid*="artifact"], .artifact, [class*="artifact"]');
+        console.log(`Found ${artifacts.length} potential artifacts`);
+        
+        artifacts.forEach((artifact, index) => {
+            const codeElement = artifact.querySelector('pre, code, textarea');
+            if (codeElement) {
+                const content = codeElement.textContent || codeElement.innerText || codeElement.value;
+                if (content && content.trim().length >= 10) {
+                    // Try to determine file type from artifact
+                    let extension = 'txt';
+                    const artifactType = artifact.getAttribute('data-type') || artifact.className;
+                    
+                    if (artifactType.includes('react') || content.includes('import React')) {
+                        extension = 'jsx';
+                    } else if (artifactType.includes('html') || content.includes('<!DOCTYPE') || content.includes('<html')) {
+                        extension = 'html';
+                    } else if (content.includes('def ') || content.includes('import ')) {
+                        extension = 'py';
+                    } else if (content.includes('function') || content.includes('const ') || content.includes('let ')) {
+                        extension = 'js';
+                    }
+                    
+                    const filename = sanitizeFilename(`claude_artifact_${index + 1}.${extension}`);
+                    downloadFile(content, filename);
+                }
+            }
+        });
+    }
+    
+    function extractFromTextContent() {
+        // Fallback: look for code-like text in the conversation
+        const messageElements = document.querySelectorAll('[data-testid*="message"], .message, [class*="message"]');
+        console.log(`Scanning ${messageElements.length} message elements`);
+        
+        messageElements.forEach((message, index) => {
+            const textContent = message.textContent || message.innerText;
+            
+            // Look for code patterns in text
+            const codePatterns = [
+                /```[\s\S]*?```/g,  // Markdown code blocks
+                /`[^`\n]{10,}`/g,    // Inline code (longer than 10 chars)
+            ];
+            
+            codePatterns.forEach((pattern, patternIndex) => {
+                const matches = textContent.match(pattern);
+                if (matches) {
+                    matches.forEach((match, matchIndex) => {
+                        let content = match.replace(/```[\w]*\n?/g, '').replace(/```/g, '').replace(/`/g, '');
+                        content = content.trim();
+                        
+                        if (content.length >= 20) { // Only download substantial code
+                            const filename = sanitizeFilename(`claude_extracted_${index}_${patternIndex}_${matchIndex}.txt`);
+                            downloadFile(content, filename);
+                        }
+                    });
+                }
+            });
+        });
+    }
+    
+    // Wait a moment for the page to be ready
+    setTimeout(() => {
+        try {
+            extractCodeBlocks();
+            extractArtifacts();
+            
+            if (downloadCount === 0) {
+                console.log('⚠️ No code blocks found, trying text extraction...');
+                extractFromTextContent();
+            }
+            
+            if (downloadCount === 0) {
+                console.log('❌ No code found in this conversation');
+                alert('No code found in this Claude conversation. Make sure you\'re on a conversation page with code blocks or artifacts.');
+            } else {
+                console.log(`🎉 Successfully downloaded ${downloadCount} files!`);
+                alert(`Success! Downloaded ${downloadCount} code files. Check your Downloads folder.`);
+            }
+        } catch (error) {
+            console.error('❌ Error:', error);
+            alert('An error occurred. Please check the browser console for details.');
+        }
+    }, 1000);
+})();
+            </div>
+        </div>
+
+        <div class="success">
+            <strong>✅ What Happens Next:</strong> The script will automatically scan your Claude conversation, find all code blocks and artifacts, then download them as individual files to your Downloads folder.
+        </div>
+
+        <div class="script-section">
+            <h2>🔧 Troubleshooting</h2>
+            <div class="step">
+                <strong>No files downloaded?</strong> Make sure you're on a Claude conversation page with code blocks or artifacts.
+            </div>
+            <div class="step">
+                <strong>Console errors?</strong> Try refreshing the page and running the script again.
+            </div>
+            <div class="step">
+                <strong>Downloads blocked?</strong> Check if your browser is blocking multiple downloads and allow them.
+            </div>
+            <div class="step">
+                <strong>Wrong file types?</strong> The script auto-detects languages but may sometimes use .txt extension for unknown code types.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyScript() {
+            const scriptText = document.getElementById('mainScript').textContent;
+            navigator.clipboard.writeText(scriptText).then(() => {
+                alert('✅ Script copied to clipboard! Now paste it in your browser console on the Claude page.');
+            }).catch(() => {
+                alert('❌ Failed to copy. Please manually select and copy the script.');
+            });
+        }
+    </script>
+</body>
+</html>
