@@ -5,7 +5,7 @@
   "main": "claude_code_downloader.html",
   "scripts": {
     "start": "open claude_code_downloader.html",
-    "test": "echo "No tests yet" && exit 0"
+    "test": "echo"
   },
   "repository": {
     "type": "git",
